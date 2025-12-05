@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BioChemHub: Daily MCQs, Topic-wise Quizzes, and Research Updates for Medical Students.">
+    <!-- Security: Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://docs.google.com; img-src 'self' data: https:;">
+    <title>BioChemHub | Mastery & Research</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Libraries -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-inner">
+            <a href="?page=home" class="logo">BioChem<span>Hub</span></a>
+            <div class="nav-links">
+                <a href="?page=home">Home</a>
+                <a href="?page=about">About</a>
+                <a href="?page=contact">Contact</a>
+                <div class="dropdown">
+                    <span class="dropbtn" onclick="toggleHeaderDropdown('nav-mcq')">Quizzes ▾</span>
+                    <div id="nav-mcq" class="dropdown-content">
+                        <a href="?topic=daily">📅 Daily Challenge</a>
+                        <a href="?topic=enz_all">★ Enzymology 100 MCQ</a>
+                        <a href="?topic=mol_all">★ Molecular Bio 100 MCQ</a>
+                        <a href="#tools-sidebar">See All Topics...</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <span class="dropbtn" onclick="toggleHeaderDropdown('nav-tools')">Tools ▾</span>
+                    <div id="nav-tools" class="dropdown-content">
+                        <a href="?tool=michaelis">Michaelis-Menten</a>
+                        <a href="?tool=ph">pH Calc</a>
+                        <a href="?tool=kw">Kw Calc</a>
+                        <a href="?tool=molarmass">Molar Mass</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="topic-nav glass-panel" id="tools-sidebar">
+            <div class="nav-header">Lab Tools</div>
+            <ul class="topic-list">
+                <li class="topic-item"><a href="?tool=michaelis" class="topic-link">Calc: Michaelis-Menten</a></li>
+                <li class="topic-item"><a href="?tool=ph" class="topic-link">Calc: pH & pOH</a></li>
+                <li class="topic-item"><a href="?tool=kw" class="topic-link">Calc: Ion Product (Kw)</a></li>
+                <li class="topic-item"><a href="?tool=entropy" class="topic-link">Calc: Entropy & Gibbs</a></li>
+                <li class="topic-item"><a href="?tool=conversions" class="topic-link">Calc: Unit Conversions</a></li>
+                <li class="topic-item"><a href="?tool=molarmass" class="topic-link">Calc: Molar Mass</a></li>
+            </ul>
+
+            <div class="nav-header" style="margin-top: 30px;">Biochemistry MCQs</div>
+            <ul class="topic-list">
+                <li class="topic-item"><a href="?topic=daily" class="topic-link">📅 Daily Challenge</a></li>
+                <!-- Topics with Submenus -->
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('mol-menu')">1. Molecular Biology ▾</div>
+                    <ul id="mol-menu" class="sub-menu">
+                        <li><a href="?topic=mol_all" class="sub-link mega-link">★ Molecular Bio 100 MCQ</a></li>
+                        <li><a href="?topic=mol_dna" class="sub-link">DNA Structure & Replication</a></li>
+                        <li><a href="?topic=mol_pol" class="sub-link">DNA Polymerases</a></li>
+                        <li><a href="?topic=mol_telo" class="sub-link">Telomeres</a></li>
+                        <li><a href="?topic=mol_repair" class="sub-link">DNA Repair</a></li>
+                        <li><a href="?topic=mol_transc" class="sub-link">Transcription</a></li>
+                        <li><a href="?topic=mol_transl" class="sub-link">Translation</a></li>
+                        <li><a href="?topic=mol_reg" class="sub-link">Gene Regulation</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('carb-menu')">2. Carbohydrate Metab ▾</div>
+                    <ul id="carb-menu" class="sub-menu">
+                        <li><a href="?topic=carb_all" class="sub-link mega-link">★ Carbohydrate 100 MCQ</a></li>
+                        <li><a href="?topic=carb_glyc" class="sub-link">Glycolysis</a></li>
+                        <li><a href="?topic=carb_tca" class="sub-link">TCA Cycle</a></li>
+                        <li><a href="?topic=carb_etc" class="sub-link">ETC & Oxidative Phos</a></li>
+                        <li><a href="?topic=carb_gluco" class="sub-link">Gluconeogenesis</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('lip-menu')">3. Lipid Metabolism ▾</div>
+                    <ul id="lip-menu" class="sub-menu">
+                        <li><a href="?topic=lip_all" class="sub-link mega-link">★ Lipids 100 MCQ</a></li>
+                        <li><a href="?topic=lip_oxi" class="sub-link">Beta Oxidation</a></li>
+                        <li><a href="?topic=lip_syn" class="sub-link">Fatty Acid Synthesis</a></li>
+                        <li><a href="?topic=lip_keto" class="sub-link">Ketogenesis</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('prot-menu')">4. Protein Metabolism ▾</div>
+                    <ul id="prot-menu" class="sub-menu">
+                        <li><a href="?topic=prot_all" class="sub-link mega-link">★ Proteins 100 MCQ</a></li>
+                        <li><a href="?topic=prot_urea" class="sub-link">Urea Cycle</a></li>
+                        <li><a href="?topic=prot_aa" class="sub-link">Amino Acids</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('enz-menu')">5. Enzymology ▾</div>
+                    <ul id="enz-menu" class="sub-menu">
+                        <li><a href="?topic=enz_all" class="sub-link mega-link">★ Enzymology 100 MCQ</a></li>
+                        <li><a href="?topic=enz_class" class="sub-link">Classification</a></li>
+                        <li><a href="?topic=enz_kinetics" class="sub-link">Kinetics (Km, Vmax)</a></li>
+                        <li><a href="?topic=enz_inhib" class="sub-link">Inhibition Types</a></li>
+                        <li><a href="?topic=enz_allo" class="sub-link">Allosteric Regulation</a></li>
+                        <li><a href="?topic=enz_iso" class="sub-link">Isoenzymes</a></li>
+                        <li><a href="?topic=enz_clin" class="sub-link">Clinical Markers</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('vit-menu')">6. Vitamins & Minerals ▾</div>
+                    <ul id="vit-menu" class="sub-menu">
+                        <li><a href="?topic=vit_all" class="sub-link mega-link">★ Vitamins 100 MCQ</a></li>
+                        <li><a href="?topic=vit_water" class="sub-link">Water-Soluble Vitamins</a></li>
+                        <li><a href="?topic=vit_fat" class="sub-link">Fat-Soluble Vitamins</a></li>
+                        <li><a href="?topic=vit_def" class="sub-link">Deficiency Diseases</a></li>
+                        <li><a href="?topic=vit_iron" class="sub-link">Iron Metabolism</a></li>
+                        <li><a href="?topic=vit_trace" class="sub-link">Trace Elements</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('horm-menu')">7. Hormones ▾</div>
+                    <ul id="horm-menu" class="sub-menu">
+                        <li><a href="?topic=horm_all" class="sub-link mega-link">★ Hormones 100 MCQ</a></li>
+                        <li><a href="?topic=horm_sig" class="sub-link">Insulin/Glucagon Sig</a></li>
+                        <li><a href="?topic=horm_thyroid" class="sub-link">Thyroid Synthesis</a></li>
+                        <li><a href="?topic=horm_steroid" class="sub-link">Steroid Hormones</a></li>
+                        <li><a href="?topic=horm_2nd" class="sub-link">Second Messengers</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('clin-menu')">8. Clinical Biochem ▾</div>
+                    <ul id="clin-menu" class="sub-menu">
+                        <li><a href="?topic=clin_all" class="sub-link mega-link">★ Clinical 100 MCQ</a></li>
+                        <li><a href="?topic=clin_liver" class="sub-link">Liver Function Tests</a></li>
+                        <li><a href="?topic=clin_renal" class="sub-link">Renal Markers</a></li>
+                        <li><a href="?topic=clin_acid" class="sub-link">Acid–Base Balance</a></li>
+                        <li><a href="?topic=clin_hb" class="sub-link">Hemoglobinopathies</a></li>
+                        <li><a href="?topic=clin_dm" class="sub-link">Diabetes Mellitus</a></li>
+                        <li><a href="?topic=clin_tumor" class="sub-link">Tumor Markers</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('tech-menu')">9. Techniques ▾</div>
+                    <ul id="tech-menu" class="sub-menu">
+                        <li><a href="?topic=tech_all" class="sub-link mega-link">★ Techniques 100 MCQ</a></li>
+                        <li><a href="?topic=tech_chrom" class="sub-link">Chromatography</a></li>
+                        <li><a href="?topic=tech_electro" class="sub-link">Electrophoresis</a></li>
+                        <li><a href="?topic=tech_spec" class="sub-link">Spectroscopy</a></li>
+                        <li><a href="?topic=tech_pcr" class="sub-link">PCR & qPCR</a></li>
+                        <li><a href="?topic=tech_blot" class="sub-link">Blotting Techniques</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('met-menu')">10. Metabolic Reg ▾</div>
+                    <ul id="met-menu" class="sub-menu">
+                        <li><a href="?topic=met_all" class="sub-link mega-link">★ Metabolic 100 MCQ</a></li>
+                        <li><a href="?topic=met_fed" class="sub-link">Fed vs Fasting State</a></li>
+                        <li><a href="?topic=met_starve" class="sub-link">Starvation</a></li>
+                        <li><a href="?topic=met_randle" class="sub-link">Randle Cycle</a></li>
+                        <li><a href="?topic=met_cori" class="sub-link">Cori & Cahill Cycles</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('imm-menu')">11. Immunology ▾</div>
+                    <ul id="imm-menu" class="sub-menu">
+                        <li><a href="?topic=imm_all" class="sub-link mega-link">★ Immunology 100 MCQ</a></li>
+                        <li><a href="?topic=imm_ab" class="sub-link">Antibody Structure</a></li>
+                        <li><a href="?topic=imm_mhc" class="sub-link">MHC I & II</a></li>
+                        <li><a href="?topic=imm_cyto" class="sub-link">Cytokines</a></li>
+                        <li><a href="?topic=imm_vac" class="sub-link">Vaccines & Adjuvants</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('neuro-menu')">12. Neuro & Omics ▾</div>
+                    <ul id="neuro-menu" class="sub-menu">
+                        <li><a href="?topic=neuro_all" class="sub-link mega-link">★ Neuro/Omics 100 MCQ</a></li>
+                        <li><a href="?topic=neuro_trans" class="sub-link">Neurotransmitters</a></li>
+                        <li><a href="?topic=neuro_bbb" class="sub-link">Blood–Brain Barrier</a></li>
+                        <li><a href="?topic=omic_prot" class="sub-link">Proteomics</a></li>
+                        <li><a href="?topic=omic_gen" class="sub-link">Genomics</a></li>
+                        <li><a href="?topic=omic_crispr" class="sub-link">CRISPR Basics</a></li>
+                    </ul>
+                </li>
+                <li class="topic-item">
+                    <div class="topic-link" onclick="toggleMenu('spec-menu')">13. Special Topics ▾</div>
+                    <ul id="spec-menu" class="sub-menu">
+                        <li><a href="?topic=spec_all" class="sub-link mega-link">★ Special 100 MCQ</a></li>
+                        <li><a href="?topic=spec_free" class="sub-link">Free Radicals</a></li>
+                        <li><a href="?topic=spec_detox" class="sub-link">Detoxification</a></li>
+                        <li><a href="?topic=spec_aging" class="sub-link">Biochem of Aging</a></li>
+                        <li><a href="?topic=spec_apop" class="sub-link">Apoptosis</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div style="margin-top:30px; font-size: 0.75rem; color:var(--text-muted); text-align:center;">
+                &copy; 2025 BioChemHub
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-stage">
+
+            <!-- AD BANNER -->
+            <div class="ad-placeholder ad-banner">
+                <span>Advertisement Space (728x90)</span>
+            </div>
+
+            <!-- FEED VIEW -->
+            <div id="view-feed">
+                <div class="feed-header">Latest Research</div>
+                <div id="blog-loading" style="text-align:center; padding:40px; color:var(--text-muted);">Loading
+                    Updates...</div>
+                <div id="dynamic-articles-feed"></div>
+                <div id="pagination-controls" class="pagination" style="display:none;"></div>
+            </div>
+
+            <!-- ARTICLE DETAIL VIEW -->
+            <div id="view-article-detail" class="full-article">
+                <div onclick="closeArticle()" class="back-btn">&larr; Back to Feed</div>
+                <div id="dynamic-article-container"></div>
+                <!-- IN-ARTICLE AD -->
+                <div class="ad-placeholder" style="margin-top:30px; height:100px;">
+                    <span>Advertisement Space</span>
+                </div>
+            </div>
+
+            <!-- QUIZ VIEW (INTERACTIVE) -->
+            <div id="view-quiz" class="quiz-view">
+                <div class="quiz-card">
+                    <div id="loading-spinner" style="text-align:center; padding:20px;">Loading Quiz...</div>
+                    <div id="error-container" style="display:none; color:var(--accent); text-align:center;"></div>
+
+                    <div id="quiz-interface" style="display:none;">
+                        <div class="quiz-header-bar">
+                            <span id="quiz-title-display" style="font-weight:bold; color:var(--primary);">Quiz
+                                Mode</span>
+                            <span id="quiz-progress-text" style="font-size:0.9rem; color:var(--text-muted);">Question 1
+                                of 10</span>
+                        </div>
+
+                        <div class="progress-container">
+                            <div id="quiz-progress-bar" class="progress-bar"></div>
+                        </div>
+
+                        <div id="question-text" class="question-text"></div>
+
+                        <div id="options-container" class="options-grid"></div>
+
+                        <div id="quiz-feedback" class="feedback-box"></div>
+
+                        <div class="quiz-controls">
+                            <button id="btn-next-question" class="btn-next" style="display:none;">Next Question</button>
+                        </div>
+                    </div>
+
+                    <div id="quiz-result" class="result-card" style="display:none;">
+                        <div class="score-circle" id="final-score">0%</div>
+                        <h2 style="margin-bottom:10px;">Quiz Completed!</h2>
+                        <p id="final-msg" style="color:var(--text-muted); margin-bottom:30px;"></p>
+                        <button onclick="restartQuiz()" class="btn-next">Try Again</button>
+                        <button onclick="window.location.href='?page=home'" class="btn-next"
+                            style="background:transparent; border:1px solid var(--card-border); margin-left:10px;">Home</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALCULATORS -->
+            <div id="view-calc-michaelis" class="quiz-view">
+                <div class="glass-panel calc-card">
+                    <h2 style="margin-top:0;">Michaelis-Menten Calculator</h2>
+                    <p style="color:var(--text-muted); margin-bottom:20px;">Calculate initial velocity ($v_0$) based on
+                        enzyme kinetics.</p>
+
+                    <div class="form-group">
+                        <label class="form-label">Vmax (Maximum Velocity)</label>
+                        <input type="number" id="mm-vmax" class="form-input" placeholder="e.g. 100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Km (Michaelis Constant)</label>
+                        <input type="number" id="mm-km" class="form-input" placeholder="e.g. 5">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">[S] (Substrate Concentration)</label>
+                        <input type="number" id="mm-s" class="form-input" placeholder="e.g. 10">
+                    </div>
+
+                    <button onclick="calculateMM()" class="btn-next" style="width:100%;">Calculate</button>
+
+                    <div id="calc-result-mm" class="feedback-box">
+                        <strong>Result:</strong> <span id="mm-result"
+                            style="font-size:1.2rem; margin-left:10px;">0</span>
+                        <div id="mm-steps" style="margin-top:10px; font-size:0.9rem;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-calc-ph" class="quiz-view">
+                <div class="glass-panel calc-card">
+                    <h2 style="margin-top:0;">pH & pOH Calculator</h2>
+                    <p style="color:var(--text-muted); margin-bottom:20px;">Calculate pH from Hydrogen ion concentration
+                        $[H^+]$.</p>
+                    <div class="form-group"><label class="form-label">$[H^+]$ Concentration (M)</label><input
+                            type="number" id="ph-conc" class="form-input" placeholder="e.g. 0.001"></div>
+                    <button onclick="calculatePH()" class="btn-next" style="width:100%;">Calculate</button>
+                    <div id="calc-result-ph" class="feedback-box"><strong>pH:</strong> <span id="res-ph"
+                            style="font-size:1.2rem; margin-left:10px;"></span>
+                        <div id="ph-steps" style="margin-top:10px; font-size:0.9rem;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-calc-kw" class="quiz-view">
+                <div class="glass-panel calc-card">
+                    <h2 style="margin-top:0;">Ion Product of Water (Kw)</h2>
+                    <p style="color:var(--text-muted); margin-bottom:20px;">Calculate $[OH^-]$ from $[H^+]$ using $K_w =
+                        1.0 \times 10^{-14}$.</p>
+                    <div class="form-group"><label class="form-label">$[H^+]$ Concentration (M)</label><input
+                            type="number" id="kw-h" class="form-input" placeholder="e.g. 1e-7"></div>
+                    <button onclick="calculateKw()" class="btn-next" style="width:100%;">Calculate</button>
+                    <div id="calc-result-kw" class="feedback-box"><strong>$[OH^-]$:</strong> <span id="res-kw"
+                            style="font-size:1.2rem; margin-left:10px;"></span>
+                        <div id="kw-steps" style="margin-top:10px; font-size:0.9rem;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-calc-entropy" class="quiz-view">
+                <div class="glass-panel calc-card">
+                    <h2 style="margin-top:0;">Gibbs Free Energy Calculator</h2>
+                    <p style="color:var(--text-muted); margin-bottom:20px;">$\Delta G = \Delta H - T\Delta S$</p>
+                    <div class="form-group"><label class="form-label">Enthalpy $\Delta H$ (kJ/mol)</label><input
+                            type="number" id="gibbs-h" class="form-input"></div>
+                    <div class="form-group"><label class="form-label">Entropy $\Delta S$ (J/mol·K)</label><input
+                            type="number" id="gibbs-s" class="form-input"></div>
+                    <div class="form-group"><label class="form-label">Temperature T (Kelvin)</label><input type="number"
+                            id="gibbs-t" class="form-input" value="298"></div>
+                    <button onclick="calculateGibbs()" class="btn-next" style="width:100%;">Calculate</button>
+                    <div id="calc-result-gibbs" class="feedback-box"><strong>$\Delta G$:</strong> <span id="res-gibbs"
+                            style="font-size:1.2rem; margin-left:10px;"></span>
+                        <div id="gibbs-steps" style="margin-top:10px; font-size:0.9rem;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-calc-conversions" class="quiz-view">
+                <div class="glass-panel calc-card">
+                    <h2 style="margin-top:0;">Unit Conversions</h2>
+                    <div class="form-group"><label class="form-label">Value</label><input type="number" id="conv-val"
+                            class="form-input"></div>
+                    <div class="form-group">
+                        <label class="form-label">Convert From -> To</label>
+                        <select id="conv-type" class="form-input" style="background:rgba(0,0,0,0.2); color:white;">
+                            <option value="mg_g">mg to g</option>
+                            <option value="g_mg">g to mg</option>
+                            <option value="uM_mM">µM to mM</option>
+                            <option value="mM_uM">mM to µM</option>
+                        </select>
+                    </div>
+                    <button onclick="calculateConv()" class="btn-next" style="width:100%;">Convert</button>
+                    <div id="calc-result-conv" class="feedback-box"><strong>Result:</strong> <span id="res-conv"
+                            style="font-size:1.2rem; margin-left:10px;"></span></div>
+                </div>
+            </div>
+
+            <div id="view-calc-molarmass" class="quiz-view">
+                <div class="glass-panel calc-card">
+                    <h2 style="margin-top:0;">Molar Mass Calculator</h2>
+                    <p style="color:var(--text-muted); margin-bottom:20px;">Calculate mass required for a specific
+                        molarity.</p>
+                    <div class="form-group"><label class="form-label">Molecular Weight (MW) (g/mol)</label><input
+                            type="number" id="mm-mw" class="form-input"></div>
+                    <div class="form-group"><label class="form-label">Desired Molarity (M)</label><input type="number"
+                            id="mm-conc" class="form-input"></div>
+                    <div class="form-group"><label class="form-label">Volume (L)</label><input type="number" id="mm-vol"
+                            class="form-input"></div>
+                    <button onclick="calculateMolarMass()" class="btn-next" style="width:100%;">Calculate</button>
+                    <div id="calc-result-mass" class="feedback-box"><strong>Mass Required:</strong> <span id="res-mass"
+                            style="font-size:1.2rem; margin-left:10px;"></span> g</div>
+                </div>
+            </div>
+
+            <!-- INFO PAGES -->
+            <div id="view-about" class="glass-panel" style="display:none; padding:40px;">
+                <h1 style="margin-top:0; color:var(--primary);">About BioChemHub</h1>
+                <p>BioChemHub is an educational platform created to support students preparing for competitive
+                    examinations in biochemistry.</p>
+                <p>We offer curated MCQs, concept explanations, and the latest research updates.</p>
+            </div>
+
+            <div id="view-contact" class="glass-panel" style="display:none; padding:40px;">
+                <h1 style="margin-top:0; color:var(--primary);">Contact Us</h1>
+                <p>Have questions, suggestions, or found a bug? We'd love to hear from you.</p>
+
+                <div class="form-group">
+                    <label class="form-label">Your Message</label>
+                    <textarea id="contact-msg" class="form-input" style="height:150px; resize:vertical;"
+                        placeholder="Type your message here..."></textarea>
+                </div>
+                <button onclick="sendEmail()" class="btn-next">Send via Email</button>
+            </div>
+
+        </main>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside class="right-sidebar">
+            <!-- SIDEBAR AD -->
+            <div class="ad-placeholder" style="height:250px; margin-bottom:20px;">
+                <span>Ad (300x250)</span>
+            </div>
+
+            <div class="glass-panel" style="padding:20px; margin-bottom:20px;">
+                <div class="nav-header">Share</div>
+                <div style="display:flex; gap:10px;">
+                    <!-- Simple Share Buttons -->
+                    <button class="page-btn"
+                        onclick="window.open('https://twitter.com/intent/tweet?url='+encodeURIComponent(window.location.href))">X</button>
+                    <button class="page-btn"
+                        onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(window.location.href))">FB</button>
+                    <button class="page-btn"
+                        onclick="navigator.clipboard.writeText(window.location.href); alert('Link Copied!')">🔗</button>
+                </div>
+            </div>
+
+            <div class="glass-panel" style="padding:20px;">
+                <div class="nav-header">Resources</div>
+                <ul class="news-list">
+                    <li class="topic-item"><a href="#" class="topic-link">Lehninger Principles</a></li>
+                    <li class="topic-item"><a href="#" class="topic-link">Download MCQs (PDF)</a></li>
+                </ul>
+            </div>
+        </aside>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
